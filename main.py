@@ -2,6 +2,7 @@ import os
 from enum import Enum
 from enfermeira import Enfermeira,TecnicaEnfermagem
 from medicos import Medico, TipoMedico
+from Faxineiro import Faxineiro
 
 
 def cadastrar_enfermeira():
@@ -20,6 +21,16 @@ def cadastrar_tecnica_enfermagem():
     turno = input("Digite o turno de trabalho da técnica de enfermagem: ")
     tecnica_enfermagem = TecnicaEnfermagem(nome, cpf, salario, turno)
     return tecnica_enfermagem
+
+
+def cadastrar_faxineiro():
+    nome = input("Digite o nome do faxineiro: ")
+    cpf = input("Digite o CPF do enfermeiro: ")
+    salario = float(input("Digite o salário do faxineiro: "))
+    turno = input("Digite o turno do faxineiro: ")
+    faxineiro = Faxineiro(nome, cpf, salario, turno)
+    return faxineiro
+
 
 
 def cadastrar_medico():
@@ -45,7 +56,10 @@ def listar_funcionarios(funcionarios):
             print(f"Técnica de Enfermagem: {funcionario.nome} - Turno: {funcionario.turno}")
         elif isinstance(funcionario, Medico):
             print(f"Médico: {funcionario.nome} - Tipo: {funcionario.tipo.name.capitalize()} - Especialidade: {funcionario.especialidade}")
+        elif isinstance(funcionario, Faxineiro):
+            print(f"Faxineiro: {funcionario.nome} - Turno: {funcionario.turno}")
     print("================================")
+
 
 
 def buscar_funcionario(funcionarios, cpf):
@@ -62,6 +76,11 @@ def atualizar_funcionario(funcionario):
     elif isinstance(funcionario, TecnicaEnfermagem):
         turno = input("Digite o novo turno de trabalho da técnica de enfermagem: ")
         funcionario.turno = turno
+    
+    elif isinstance(funcionario, Faxineiro):
+        turno = input("Digite o novo turno de trabalho do faxineiro: ")
+        funcionario.turno = turno
+
     elif isinstance(funcionario, Medico):
         print("1. Alterar Especialidade")
         print("2. Alterar Tipo (Residência ou Terceirizado)")
@@ -100,10 +119,11 @@ def exibir_menu():
     print("1. Cadastrar Enfermeira")
     print("2. Cadastrar Técnica de Enfermagem")
     print("3. Cadastrar Médico")
-    print("4. Listar Funcionários")
-    print("5. Buscar Funcionário")
-    print("6. Atualizar Funcionário")
-    print("7. Excluir Funcionário")
+    print("4. Cadastrar Faxineiro")
+    print("5. Listar Funcionários")
+    print("6. Buscar Funcionário")
+    print("7. Atualizar Funcionário")
+    print("8. Excluir Funcionário")
     print("0. Sair")
     print("=================================================")
 
@@ -120,10 +140,13 @@ def executar_opcao(opcao, funcionarios):
     elif opcao == "3":
         medico = cadastrar_medico()
         funcionarios.append(medico)
-        print("Médico cadastrado com sucesso!")
     elif opcao == "4":
-        listar_funcionarios(funcionarios)
+        faxineiro = cadastrar_faxineiro()
+        funcionarios.append(faxineiro)    
+        print("Faxineiro Cadastrado com Sucesso!")
     elif opcao == "5":
+        listar_funcionarios(funcionarios)
+    elif opcao == "6":
         cpf = input("Digite o CPF do funcionário a ser buscado: ")
         funcionario = buscar_funcionario(funcionarios, cpf)
         if funcionario:
@@ -131,11 +154,15 @@ def executar_opcao(opcao, funcionarios):
                 print(f"Enfermeira encontrada: {funcionario.nome} - Especialidade: {funcionario.especialidade}")
             elif isinstance(funcionario, TecnicaEnfermagem):
                 print(f"Técnica de Enfermagem encontrada: {funcionario.nome} - Turno: {funcionario.turno}")
+
+            elif isinstance(funcionario, Faxineiro):
+                print(f"Faxineiro: {funcionario.nome} - Turno: {funcionario.turno}") 
+
             elif isinstance(funcionario, Medico):
                 print(f"Médico encontrado: {funcionario.nome} - Tipo: {funcionario.tipo.name.capitalize()} - Especialidade: {funcionario.especialidade}")
         else:
             print("Funcionário não encontrado!")
-    elif opcao == "6":
+    elif opcao == "7":
         cpf = input("Digite o CPF do funcionário a ser atualizado: ")
         funcionario = buscar_funcionario(funcionarios, cpf)
         if funcionario:
@@ -143,7 +170,7 @@ def executar_opcao(opcao, funcionarios):
             print("Funcionário atualizado com sucesso!")
         else:
             print("Funcionário não encontrado!")
-    elif opcao == "7":
+    elif opcao == "8":
         cpf = input("Digite o CPF do funcionário a ser excluído: ")
         funcionario = buscar_funcionario(funcionarios, cpf)
         if funcionario:
